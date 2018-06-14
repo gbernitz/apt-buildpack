@@ -69,7 +69,7 @@ func main() {
 		logger.Error("Error writing config.yml: %s", err.Error())
 		os.Exit(15)
 	}
-	if exists, err := libbuildpack.FileExists(filepath.Join(stager.BuildDir(), "apt_finish.yml")); err != nil {
+	if _, err := libbuildpack.FileExists(filepath.Join(stager.BuildDir(), "apt_finish.yml")); err != nil {
 		logger.Error("Unable to test existence of apt_finish.yml: %s", err.Error())
 		os.Exit(16)
 		a := apt.New(command, filepath.Join(stager.BuildDir(), "apt_finish.yml"), stager.CacheDir(), filepath.Join(stager.DepDir(), "apt"))
