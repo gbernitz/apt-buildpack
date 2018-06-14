@@ -85,7 +85,8 @@ func (a *Apt) AddKeys() (string, error) {
 		}
 	}
 	for _, keyURL := range a.Keys {
-		if out, err := a.command.Output("/", "apt-key", "--keyring", a.trustedKeys, "adv", "--keyserver keyserver.ubuntu.com --recv-keys C81FC2F43A48B25808F9583BDFF170F324D41134 9CDB294B29A5B1E2E00C24C022E8EF3461A50EF6"); err != nil {
+		//if out, err := a.command.Output("/", "apt-key", "--keyring", a.trustedKeys, "adv", "--keyserver keyserver.ubuntu.com --recv-keys C81FC2F43A48B25808F9583BDFF170F324D41134 9CDB294B29A5B1E2E00C24C022E8EF3461A50EF6"); err != nil {
+		if out, err := a.command.Output("/", "apt-key", "--keyring", a.trustedKeys, "adv", "--fetch-keys", keyURL); err != nil {
 			return out, fmt.Errorf("Could not add apt key %s: %v", keyURL, err)
 		}
 	}
