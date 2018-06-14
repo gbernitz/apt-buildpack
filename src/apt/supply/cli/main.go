@@ -69,6 +69,25 @@ func main() {
 		logger.Error("Error writing config.yml: %s", err.Error())
 		os.Exit(15)
 	}
+	if exists, err := libbuildpack.FileExists(filepath.Join(stager.BuildDir(), "apt_finish.yml")); err != nil {
+		logger.Error("Unable to test existence of apt_finish.yml: %s", err.Error())
+		os.Exit(16)
+		a := apt.New(command, filepath.Join(stager.BuildDir(), "apt_finish.yml"), stager.CacheDir(), filepath.Join(stager.DepDir(), "apt"))
+		if err := a.Setup(); err != nil {
+			logger.Error("Unable to initialize apt package: %s", err.Error())
+			os.Exit(13)
+		}
 
+		supplier := supply.New(stager, a, logger)
+
+		if err := supplier.Run(); err != nil {
+			os.Exit(14)
+		}
+
+		if err := stager.WriteConfigYml(nil); err != nil {
+			logger.Error("Error writing config.yml: %s", err.Error())
+			os.Exit(15)
+		}
+	}
 	stager.StagingComplete()
 }
